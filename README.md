@@ -65,3 +65,19 @@ vscode linter showed this warning: Parameter 'adminPassword' may represent a sec
 # get the admin password from keyvault azprodshsvckv in azprodshsvckv-rg in login.yml after successful login
 
 # update bicep to conditionally add to recovery services vault for backup to an existing vault to an existing backup policy
+
+Expected resource name to contain 3 "/" character(s). The number of name segments must match the number of segments in the resource type.bicep
+
+The error you're encountering is due to the incorrect resource name format for the backupPolicy resource. The name should contain the correct number of segments to match the resource type.
+
+Resource "customScriptExtension" has its name formatted as a child of resource "vm". The syntax can be simplified by using the parent property.
+
+The enclosing array expected an item of type "bool", but the provided item was of type "'true'".
+
+
+The enclosing array expected an item of type "bool", but the provided item was of type "'true'".
+Expected a value of type "bool" but the provided value is of type "'false'".
+The property "odata.type" requires a value of type "'Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria' | 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria' | 'Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria'", but none was supplied.
+Resource type "Microsoft.Automation/automationAccounts/runbooks@2020-01-13-preview" does not have types available. Bicep is unable to validate resource properties prior to deployment, but this will not block the resource from being deployed.
+Expected resource name to contain 3 "/" character(s). The number of name segments must match the number of segments in the resource type.
+

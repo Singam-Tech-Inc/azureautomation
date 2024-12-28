@@ -88,7 +88,8 @@ resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
 }
 
 resource customScriptExtension 'Microsoft.Compute/virtualMachines/extensions@2020-06-01' = {
-  name: '${vmName}/customScriptExtension'
+  name: 'customScriptExtension'
+  parent: vm
   location: location
   properties: {
     publisher: 'Microsoft.Azure.Extensions'
