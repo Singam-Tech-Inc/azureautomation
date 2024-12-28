@@ -6,7 +6,6 @@
     location: eastus
     vm_name: myVM
     admin_username: azureuser
-    admin_password: P@ssw0rd1234!
     vm_size: Standard_B2s
     vnet_name: myVnet
     subnet_name: mySubnet

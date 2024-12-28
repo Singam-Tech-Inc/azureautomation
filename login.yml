@@ -9,3 +9,15 @@
     - name: Debug login result
       debug:
         var: login_result
+
+    - name: Get admin password from Key Vault
+      command: >
+        az keyvault secret show
+        --name adminPassword
+        --vault-name azprodshsvckv
+        --resource-group azprodshsvckv-rg
+      register: keyvault_secret
+
+    - name: Set admin password fact
+      set_fact:
+        admin_password: "{{ keyvault_secret.stdout | from_json | json_query('value') }}"
