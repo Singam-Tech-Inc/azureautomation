@@ -10,11 +10,7 @@ param staticPrivateIP string = '10.0.0.4'
 param proximityPlacementGroupName string = 'myProximityPlacementGroup'
 param automationAccountName string = 'myExistingAutomationAccount'
 param actionGroupId string = '/subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/microsoft.insights/actionGroups/<action-group-name>'
-@allowed([
-  'true'
-  'false'
-])
-param enableBackup bool = 'false'
+param enableBackup bool = false
 param recoveryServicesVaultName string = 'myRecoveryServicesVault'
 param backupPolicyName string = 'myBackupPolicy'
 
@@ -124,6 +120,7 @@ resource cpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     criteria: {
       allOf: [
         {
+          odata.type: 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
           metricName: 'Percentage CPU'
           metricNamespace: 'Microsoft.Compute/virtualMachines'
           operator: 'GreaterThan'
@@ -155,6 +152,7 @@ resource memoryAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     criteria: {
       allOf: [
         {
+          odata.type: 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
           metricName: 'Available Memory Bytes'
           metricNamespace: 'Microsoft.Compute/virtualMachines'
           operator: 'LessThan'
