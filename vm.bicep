@@ -10,9 +10,7 @@ param staticPrivateIP string = '10.0.0.4'
 param proximityPlacementGroupName string = 'myProximityPlacementGroup'
 param automationAccountName string = 'myExistingAutomationAccount'
 param actionGroupId string = '/subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/microsoft.insights/actionGroups/<action-group-name>'
-param enableBackup bool = false
-param recoveryServicesVaultName string = 'myRecoveryServicesVault'
-param backupPolicyName string = 'myBackupPolicy'
+param adGroups array = []
 
 resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' existing = {
   name: vnetName
@@ -84,8 +82,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
 }
 
 resource customScriptExtension 'Microsoft.Compute/virtualMachines/extensions@2020-06-01' = {
-  name: 'customScriptExtension'
-  parent: vm
+  name: '${vmName}/customScriptExtension'
   location: location
   properties: {
     publisher: 'Microsoft.Azure.Extensions'
@@ -120,7 +117,6 @@ resource cpuAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     criteria: {
       allOf: [
         {
-          odata.type: 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
           metricName: 'Percentage CPU'
           metricNamespace: 'Microsoft.Compute/virtualMachines'
           operator: 'GreaterThan'
@@ -152,7 +148,6 @@ resource memoryAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
     criteria: {
       allOf: [
         {
-          odata.type: 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
           metricName: 'Available Memory Bytes'
           metricNamespace: 'Microsoft.Compute/virtualMachines'
           operator: 'LessThan'
@@ -267,12 +262,18 @@ resource stopVMJob 'Microsoft.Automation/automationAccounts/jobSchedules@2020-01
   }
 }
 
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2021-06-01' = if (enableBackup) {
-  name: '${recoveryServicesVaultName}/Azure/protectionContainers/iaasvmcontainer;iaasvmcontainerv2;${resourceGroup().name};${vmName}/protectedItems/vm;${vmName}'
-  location: location
-  properties: {
-    policyId: subscriptionResourceId('Microsoft.RecoveryServices/vaults/backupPolicies', recoveryServicesVaultName, backupPolicyName)
-    protectedItemType: 'Microsoft.Compute/virtualMachines'
-    sourceResourceId: vm.id
+
+resource vmRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
+  for adGroup in adGroups: {
+    name: guid(vm.id, adGroup)
+    scope: vm.id
+    properties: {
+      roleDefinitionId: resourceId(
+        'Microsoft.Authorization/roleDefinitions',
+        'b24988ac-6180-42a0-ab88-20f7382dd24c' // "Virtual Machine Contributor"
+      )
+      principalId: adGroup
+      principalType: 'Group'
+    }
   }
-}
+]

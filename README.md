@@ -23,6 +23,9 @@ Sure, here is an example of a Bicep template to create an Azure VM:
 
 Here is an updated Bicep template to create an Azure VM on an existing VNet and subnet with a static IP:
 
+No activated agent with id "ms-azuretools.azure-agent"
+
+
 # update it to create on on existing proximity group
 
 Here is the updated Bicep template to create an Azure VM on an existing VNet, subnet, and proximity placement group with a static IP:
