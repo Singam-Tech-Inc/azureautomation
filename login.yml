@@ -1,0 +1,11 @@
+---
+- name: Login to Azure using system-assigned managed identity
+  hosts: localhost
+  tasks:
+    - name: Login to Azure
+      command: az login --identity
+      register: login_result
+
+    - name: Debug login result
+      debug:
+        var: login_result

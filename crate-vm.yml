@@ -1,0 +1,40 @@
+---
+- name: Deploy Azure VM using Bicep template
+  hosts: localhost
+  vars:
+    resource_group: myResourceGroup
+    location: eastus
+    vm_name: myVM
+    admin_username: azureuser
+    admin_password: P@ssw0rd1234!
+    vm_size: Standard_B2s
+    vnet_name: myVnet
+    subnet_name: mySubnet
+    static_private_ip: 10.0.0.4
+    proximity_placement_group_name: myProximityPlacementGroup
+    automation_account_name: myExistingAutomationAccount
+
+  pre_tasks:
+    - import_playbook: /c:/src/azureautomation/login.yml
+
+  tasks:
+    - name: Deploy VM using Bicep template
+      command: >
+        az deployment group create
+        --resource-group {{ resource_group }}
+        --template-file /C:/src/azureautomation/vm.bicep.txt
+        --parameters vmName={{ vm_name }}
+                     adminUsername={{ admin_username }}
+                     adminPassword={{ admin_password }}
+                     vmSize={{ vm_size }}
+                     vnetName={{ vnet_name }}
+                     subnetName={{ subnet_name }}
+                     staticPrivateIP={{ static_private_ip }}
+                     proximityPlacementGroupName={{ proximity_placement_group_name }}
+                     automationAccountName={{ automation_account_name }}
+        --mode Incremental
+      register: deployment_result
+
+    - name: Debug deployment result
+      debug:
+        var: deployment_result
