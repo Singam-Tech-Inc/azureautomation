@@ -10,6 +10,13 @@ param staticPrivateIP string = '10.0.0.4'
 param proximityPlacementGroupName string = 'myProximityPlacementGroup'
 param automationAccountName string = 'myExistingAutomationAccount'
 param actionGroupId string = '/subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/microsoft.insights/actionGroups/<action-group-name>'
+@allowed([
+  'true'
+  'false'
+])
+param enableBackup bool = 'false'
+param recoveryServicesVaultName string = 'myRecoveryServicesVault'
+param backupPolicyName string = 'myBackupPolicy'
 
 resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' existing = {
   name: vnetName
@@ -258,5 +265,15 @@ resource stopVMJob 'Microsoft.Automation/automationAccounts/jobSchedules@2020-01
       vmName: vmName
       resourceGroupName: resourceGroup().name
     }
+  }
+}
+
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2021-06-01' = if (enableBackup) {
+  name: '${recoveryServicesVaultName}/Azure/protectionContainers/iaasvmcontainer;iaasvmcontainerv2;${resourceGroup().name};${vmName}/protectedItems/vm;${vmName}'
+  location: location
+  properties: {
+    policyId: subscriptionResourceId('Microsoft.RecoveryServices/vaults/backupPolicies', recoveryServicesVaultName, backupPolicyName)
+    protectedItemType: 'Microsoft.Compute/virtualMachines'
+    sourceResourceId: vm.id
   }
 }
