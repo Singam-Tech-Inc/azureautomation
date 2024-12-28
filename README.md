@@ -84,3 +84,11 @@ The property "odata.type" requires a value of type "'Microsoft.Azure.Monitor.Mul
 Resource type "Microsoft.Automation/automationAccounts/runbooks@2020-01-13-preview" does not have types available. Bicep is unable to validate resource properties prior to deployment, but this will not block the resource from being deployed.
 Expected resource name to contain 3 "/" character(s). The number of name segments must match the number of segments in the resource type.
 
+# permissions added
+
+# Conclusion
+
+Github copilot for business with vscode extensions using 01 Preview model is an excellent code intellisense on Steroids provided you know the technology and can analyze the code it generates and make adjustments to the code.
+
+
+I have learnt and experience with these tools and technologies. It would have taken a day for me to perfect the script. And another day to identify the problems and issues identified with the software that get installed

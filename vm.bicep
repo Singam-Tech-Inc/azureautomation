@@ -96,7 +96,8 @@ resource customScriptExtension 'Microsoft.Compute/virtualMachines/extensions@202
         sudo apt-get install -y python3.12 build-essential golang rustc g++ &&
         sudo apt-get install -y python3-pip &&
         python3.12 -m pip install --user pipx &&
-        python3.12 -m pipx ensurepath
+        python3.12 -m pipx ensurepath &&
+        echo "export PATH=$PATH:/home/${adminUsername}/.local/bin" >> /home/${adminUsername}/.bashrc
       '''
     }
   }
