@@ -1,5 +1,5 @@
 # Introduction
-# What can Github Copilot Busi#ness do for you?
+# What can Github Copilot Business do for you?
 
 # Attempt 1: I started with a question as follows
 
